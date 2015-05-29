@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:body>
+        <ui:composition template="/resources/template/main_template.xhtml">                                                                     
+            <ui:define name="navigation">
+                <ul>                                                            
+                        <li><h:link value="Home" outcome="/views/pages/index"/></li>
+                        <li><h:link value="Products" outcome="/views/products"/></li>                                                
+                        <li>
+                            <h:form>
+                                <h:commandLink value="#{(clientController.login) ? 'Logout' :'Login'}"
+                                               action ="#{clientController.doLogout(message)}"/>                            
+                            </h:form>
+                        </li>
+                        <li><h:link value="Contact Us" outcome="/views/pages/contact_us"/></li>                        
+                </ul>
+            </ui:define>
+            <ui:define name="body">                  
+                
+                <h2 style="color: red">Under Construction!</h2>
+                <h3>
+                    Warning: Come back soon.
+                    <br />
+                    <br/>
+                    <h:link value="Go Home" outcome="/views/pages/index" />
+                </h3>
+            </ui:define>
+            
+        </ui:composition>        
+    </h:body>
+</html>
+
+
+

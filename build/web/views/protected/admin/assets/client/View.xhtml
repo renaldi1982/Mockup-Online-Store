@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:body>
+        <ui:composition template="/resources/template/main_template.xhtml">                                                                     
+            <ui:define name="navigation">
+                <ul>                                                            
+                    <li><h:link value="Home" outcome="/views/pages/index"/></li>
+                    <li><h:link value="Products" outcome="/views/pages/products"/></li>                                            
+                    <li class="selected">
+                        <h:form>
+                            <h:commandLink value="#{(clientController.login) ? 'Logout' :'Login'}"
+                                           action="#{clientController.doLogout('Logged Out Success! See you and come visit us again!')}"/>                            
+                        </h:form>
+                    </li>
+                    <li><h:link value="Contact Us" outcome="/views/snippets/image_management"/></li>                        
+                </ul>                
+            </ui:define>
+            <ui:define name="body">   
+                
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:form class="jsfcrud_list_form">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="#{bundle.ModifiedDate}"/>
+                        <h:outputText value="#{clientController.selected.modifiedDate}" 
+                                      title="#{bundle.ModifiedDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ClientUsername}"/>
+                        <h:outputText value="#{clientController.selected.username}" 
+                                      title="#{bundle.ClientUsername}"/>
+                        <h:outputText value="#{bundle.ClientFirstName}"/>
+                        <h:outputText value="#{clientController.selected.firstName}" 
+                                      title="#{bundle.ClientFirstName}"/>
+                        <h:outputText value="#{bundle.ClientLastName}"/>
+                        <h:outputText value="#{clientController.selected.lastName}" 
+                                      title="#{bundle.ClientLastName}"/>
+                        <h:outputText value="#{bundle.ClientPhone}"/>
+                        <h:outputText value="#{clientController.selected.phone}" 
+                                      title="#{bundle.ClientPhone}">                            
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ClientEmail}"/>
+                        <h:outputText value="#{clientController.selected.email}" 
+                                      title="#{bundle.ClientEmail}"/>
+                        <h:outputText value="#{bundle.ClientStreet}"/>
+                        <h:outputText value="#{clientController.selected.street}" 
+                                      title="#{bundle.ClientStreet}"/>
+                        <h:outputText value="#{bundle.ClientCity}"/>
+                        <h:outputText value="#{clientController.selected.city}" 
+                                      title="#{bundle.ClientCity}"/>
+                        <h:outputText value="#{bundle.ClientState}"/>
+                        <h:outputText value="#{clientController.selected.state}" 
+                                      title="#{bundle.ClientState}"/>
+                    </h:panelGrid>
+                    <br />
+                    <h:commandLink action="#{clientController.destroyAndView}" value="#{bundle.Remove}"/>
+                    <br />
+                    <br />
+                    <h:link outcome="Edit" value="#{bundle.Edit}"/>
+                    <br />
+                    <h:commandLink action="#{clientController.prepareCreate}" value="#{bundle.Create}" />
+                    <br />
+                    <h:commandLink action="#{clientController.prepareList}" value="#{bundle.ListAll}"/>
+                    <br />
+                    <br />
+                    <h:link outcome="/views/pages/index" value="#{bundle.Index}"/>
+
+                </h:form>
+                
+            </ui:define>
+        </ui:composition>
+            
+    </h:body>
+</html>
+

@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:body>
+        <ui:composition template="/resources/template/main_template.xhtml">                                                                     
+            
+            <ui:define name="navigation">
+                <ul>                                                            
+                        <li><h:link value="Home" outcome="/views/pages/index"/></li>   
+                        <li><h:link value="Products" outcome="/views/pages/products"/></li>
+                        <li class="selected">
+                            <h:form>
+                                <h:commandLink value="#{(clientController.login) ? 'Logout' :'Login'}"
+                                               action="#{clientController.doLogout('')}"/>                            
+                            </h:form>
+                        </li>
+                        <li><h:link value="Contact Us" outcome="/views/pages/contact_us"/></li>                        
+                </ul>
+                
+            </ui:define>
+            
+            <ui:define name="body">                      
+            
+                <fieldset class="fieldset-auto-width">                
+                    <legend>Login</legend>            
+                    <form action="j_security_check" method="POST">
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Username" />
+                            <input type="text" id="j_username" name="j_username" />
+                            <h:outputText value="Password" />
+                            <input type="password" id="j_password" name="j_password" />
+                            <h:outputLabel value=""/>
+                            <h:panelGroup>                            
+                                <h:link value="Create New Account" outcome="/views/authentication/registration"/><br />                            
+                                <h:link value="Forgot Password" outcome="/views/authentication/forgot_password"/><br />    
+                                <input type="submit" value="Login" />                                                        
+                            </h:panelGroup>
+                            
+                            
+                        </h:panelGrid>                           
+                    </form>
+                </fieldset>                
+                
+            </ui:define>
+            
+        </ui:composition>
+                                                      
+    </h:body>
+</html>
+

@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:body>
+        
+        <ui:composition template="/resources/template/main_template.xhtml">                                                                     
+            <h:outputScript target="head" library="js" name="jquery-latest.min.js"/>                                    
+            <h:outputScript target="head" library="js" name="script.js"/>                  
+            <ui:define name="navigation">
+                <ul>
+                    <li><h:link value="Index" outcome="/views/pages/index"/></li>                         
+                    <li class="selected">
+                        <h:form>
+                            <h:commandLink value="#{(clientController.login) ? 'Logout' :'Login'}"
+                                           action="#{clientController.doLogout('Logged Out Success! See you and come visit us again!')}"/>                            
+                        </h:form>
+                    </li>
+                </ul>
+            </ui:define>
+            
+            <ui:define name="body">  
+        
+                <h:form id="listproductform" styleClass="jsfcrud_list_form">                    
+                    <h:panelGroup id="messagePanel" layout="block">
+                        <!--<h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>-->
+                    </h:panelGroup>
+                    
+                    <p:outputPanel style="font-size: small;font-family: '#RokkittRegular'">                                            
+                        <h:selectOneMenu id="selectonecategory" value="#{itemController.selectedCategory}" converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemLabel="----- Show All -----" noSelectionOption="true" />
+                            <f:selectItems value="#{itemController.availableItems}" var="item"/>
+                            <f:ajax execute="@this" render="@all" event="change" listener="#{itemController.categoryListener}"/>
+                        </h:selectOneMenu><br />                    
+                    </p:outputPanel>
+                    <h:panelGroup rendered="#{itemController.items.rowCount > 0}">  
+                        <p:outputPanel style="font-size: small;font-family: '#RokkittRegular'">       
+                            <h:outputText value="#{itemController.pagination.pageFirstItem + 1}..#{itemController.pagination.pageLastItem + 1}/#{itemController.pagination.itemsCount}"/>&nbsp;
+                            <h:commandLink action="#{itemController.previous}" value="#{bundle.Previous}" 
+                                           rendered="#{itemController.pagination.hasPreviousPage}"/>&nbsp;
+                            <h:commandLink action="#{itemController.next}" value="#{bundle.Next}" rendered="#{itemController.pagination.hasNextPage}"/>&nbsp;
+                        </p:outputPanel>       
+                        <h:dataTable value="#{itemController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ModifiedDate}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.modifiedDate}">
+                                    <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ItemCategory}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.category}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ItemName}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.name}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ItemPrice}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.price}">
+                                    <f:convertNumber currencyCode="USD" type="currency" maxFractionDigits="2" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ItemQuantity}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.quantity}"/>                                                          
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Images"/>
+                                </f:facet>
+                                
+                                <h:panelGrid columns="2">
+                                    
+                                    <p:commandLink update=":imagedialogform" 
+                                                   oncomplete="PF('imageDialog').show()" 
+                                                   title="Manage Image"                                                   
+                                                   rendered="#{not empty item.images}">
+                                         <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />                                         
+                                         <f:setPropertyActionListener value="#{item}" target="#{itemController.selected}"/> 
+                                     </p:commandLink>                                    
+                                     <p:commandLink oncomplete="PF('addImageDialog').show()" 
+                                                    title="Add Image">
+                                         <h:outputText styleClass="ui-icon ui-icon-plus" style="margin:0 auto;" />
+                                         <f:setPropertyActionListener value="#{item}" target="#{itemController.selected}" />
+                                     </p:commandLink>
+                                                                        
+                                </h:panelGrid>
+                                                                
+                            </h:column>                                                                           
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="&nbsp;"/>
+                                </f:facet>
+                                <h:commandLink action="#{itemController.prepareView}" value="#{bundle.View}"/>
+                                <h:outputText value=" "/>
+                                <h:commandLink action="#{itemController.prepareEdit}" value="#{bundle.Edit}"/>
+                                <h:outputText value=" "/>
+                                <h:commandLink action="#{itemController.destroy}" value="#{bundle.Remove}"/>
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                    <br />
+                    <p:outputPanel style="font-family: 'RokkittRegular'">
+                        <h:commandLink action="#{itemController.prepareCreate}" value="#{bundle.Create}"/>
+                    </p:outputPanel>
+            </h:form>
+                
+            <h:form id="imagedialogform" enctype="multipart/form-data">
+                <p:dialog header="Image Info" widgetVar="imageDialog"
+                          modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    
+                    <p:dataGrid var="image" 
+                                id="images"
+                                value="#{imageManager.getItemImages(itemController.selected)}" 
+                                columns="1"
+                                rows="2" 
+                                rendered="#{not empty imageManager.getItemImages(itemController.selected)}">
+                        <p:panel header="#{image.name}" style="text-align:center" 
+                                 rendered="#{not empty image}">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <p:graphicImage value="#{imageManager.image}">
+                                    <f:param name="imageid" value="#{image.id}"/>
+                                </p:graphicImage>       
+
+                                <h:outputText value="#{image.content_type}" />
+
+                                <h:commandLink value="remove" action="#{itemController.deleteImage(image)}" />                                                                    
+                            </h:panelGrid>
+                        </p:panel>                        
+                    </p:dataGrid>
+
+                </p:dialog>
+
+
+                <p:dialog header="Add Image" widgetVar="addImageDialog" 
+                          modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel>
+                        <p:fileUpload fileUploadListener="#{itemController.prepareAddImage}" 
+                          allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="5000000"
+                          label="Choose Image" 
+                          update=":listproductform"/>
+                    </p:outputPanel>                        
+                </p:dialog>
+                
+            </h:form>
+                
+            </ui:define>
+            
+        </ui:composition>
+    </h:body>
+</html>

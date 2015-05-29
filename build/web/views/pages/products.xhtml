@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:body>
+        
+        <ui:composition template="/resources/template/main_template.xhtml">                             
+            <ui:define name="navigation">
+                <ul>                                                            
+                        <li><h:link value="Home" outcome="/views/pages/index"/></li>
+                        <li class="selected"><h:link value="Products" outcome="/views/pages/products"/></li>                                                
+                        <li>
+                            <h:form>
+                                <h:commandLink value="#{(clientController.login) ? 'Logout' :'Login'}"
+                                               action ="#{clientController.doLogout(message)}"/>                            
+                            </h:form>
+                        </li>
+                        <li><h:link value="Contact Us" outcome="/views/pages/contact_us"/></li>                        
+                </ul>
+            </ui:define>
+            
+            <ui:define name="body">                                                                   
+                
+                <h:form id="showcaseproductform" class="jsfcrud_list_form">    
+                    <p:outputPanel>
+                        <h:selectOneMenu id="selectonecategory" 
+                                         value="#{itemController.selectedCategory}" 
+                                         converter="omnifaces.SelectItemsConverter"
+                                         style="font-size: small">
+                            <f:selectItem itemLabel="----- Show All -----" noSelectionOption="true" />
+                            <f:selectItems value="#{itemController.availableItems}" var="item"/>
+                            <f:ajax execute="@this" render=":showcaseproductform messagePanel" event="change" listener="#{itemController.categoryListener}"/>
+                        </h:selectOneMenu><br/>
+                        <h:outputText value="*Please Click on the Item's Image to Shop" 
+                                      style="font-size: small;color: red;"
+                                      rendered="#{clientController.login}"/>
+                    </p:outputPanel>
+                    
+                    <br /><br />                                         
+                    <p:outputPanel style="font-size: small">                        
+                        <h:outputText value="#{itemController.pagination.pageFirstItem + 1}..#{itemController.pagination.pageLastItem + 1}/#{itemController.pagination.itemsCount}"/>&nbsp;
+                        <h:commandLink action="#{itemController.previous}" value="#{bundle.Previous}" 
+                                       rendered="#{itemController.pagination.hasPreviousPage}"/>&nbsp;
+                        <h:commandLink action="#{itemController.next}" value="#{bundle.Next}" rendered="#{itemController.pagination.hasNextPage}"/>&nbsp;
+                    </p:outputPanel>                                        
+                    <h:dataTable id="productstableitem" value="#{itemController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ModifiedDate}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.modifiedDate}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ItemCategory}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.category}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ItemName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.name}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ItemPrice}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.price}">
+                                <f:convertNumber currencyCode="USD" type="currency" maxFractionDigits="2" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column id="itemquantity">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ItemQuantity}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.quantity}"/>                                                          
+                        </h:column>
+                                                              
+                        <h:column>
+                            <f:facet name="header">Click for item details</f:facet>
+                            <ui:repeat value="#{imageManager.getItemImages(item)}" var="image">
+                                <p:commandLink update=":imagedialogform:imageDetail" 
+                                               action="#{shoppingCartController.prepareCart}"
+                                               oncomplete="PF('imageDialog').show()" 
+                                               title="Enlarge">
+                                    <p:graphicImage value="#{imageManager.smallImage}"                                                 
+                                                    style="border-right: solid thin #666666;border-bottom: solid thin #666666;border-radius: 20px">
+                                        <f:param name="imageid" value="#{image.id}"/>
+                                    </p:graphicImage>                                             
+                                    <f:setPropertyActionListener value="#{image}" target="#{imageManager.selectedImage}" /> 
+                                    <f:setPropertyActionListener value="#{item}" target="#{itemController.selected}"/>                                    
+                                </p:commandLink> 
+                                <h:outputText value="&nbsp;"/>
+                            </ui:repeat>                               
+                        </h:column>     
+                                                                                 
+                    </h:dataTable>                                        
+
+                </h:form>
+                
+                <h:form id="imagedialogform" enctype="multipart/form-data">
+                    <p:dialog header="Item Details" widgetVar="imageDialog"
+                              modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="imageDetail" style="text-align:center;font-size: small">
+                            <p:panelGrid rendered="#{not empty imageManager.selectedImage}" 
+                                         columnClasses="label,value"
+                                         style="margin-top:-5px">
+                                                                    
+                                <f:facet name="header">
+                                    <p:row>
+                                        <p:column colspan="2">
+                                            <p:graphicImage value="#{imageManager.image}">
+                                                <f:param name="imageid" value="#{imageManager.selectedImage.id}"/>
+                                            </p:graphicImage>                                                                            
+                                        </p:column>
+                                    </p:row>                                    
+                                </f:facet>                                                                
+                                
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText value="#{itemController.selected.category == 'Bread' ? bundle.BreadNetContent 
+                                                               : itemController.selected.category == 'Butter' ? bundle.ButterFatType
+                                                               : itemController.selected.category == 'Milk' ? bundle.MilkTaste : ''}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{itemController.selected.unique1}"/>
+                                    </p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText value="#{itemController.selected.category == 'Bread' ? bundle.BreadTexture
+                                                               : itemController.selected.category == 'Butter' ? bundle.ButterVariety
+                                                               : itemController.selected.category == 'Milk' ? bundle.MilkType : ''}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{itemController.selected.unique2}"/>
+                                    </p:column>
+                                </p:row>                                
+                                
+                                <p:row rendered="#{clientController.login}">
+                                    <p:column colspan="2" style="border: none;">                                        
+                                        <div style="vertical-align: middle;display: inline-block">                                                                                          
+                                            <p:spinner id="spinnerorderquantity" min="1" 
+                                                       title="Enter Quantity to put in Cart" size="2" 
+                                                       value="#{shoppingCartController.quantity}">
+                                                
+                                            </p:spinner>                                        
+                                            <p:commandButton update="@all"
+                                                             action="#{shoppingCartController.addItem}" 
+                                                             style="margin-left: 5px;float: right" 
+                                                             icon="ui-icon-check" title="Add Item to Cart">                                                        
+                                            </p:commandButton>                                            
+                                        </div>
+                                        
+                                    </p:column>
+                                </p:row>
+                                
+                            </p:panelGrid>
+                            
+                            
+                        </p:outputPanel>
+                    </p:dialog>                                                                               
+
+                </h:form>
+                
+            </ui:define>
+            
+        </ui:composition>
+        
+    </h:body>
+</html>
+

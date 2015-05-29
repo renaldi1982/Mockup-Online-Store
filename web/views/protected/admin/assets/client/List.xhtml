@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:body>
+        <ui:composition template="/resources/template/main_template.xhtml">                                                                     
+            <ui:define name="navigation">
+                <ul>                                                            
+                    <li><h:link value="Home" outcome="/views/pages/index"/></li>
+                    <li><h:link value="Products" outcome="/views/pages/products"/></li>                                            
+                    <li class="selected">
+                        <h:form>
+                            <h:commandLink value="#{(clientController.login) ? 'Logout' :'Login'}"
+                                           action="#{clientController.doLogout('Logged Out Success! See you and come visit us again!')}"/>                            
+                        </h:form>
+                    </li>
+                    <li><h:link value="Contact Us" outcome="/views/pages/contact_us"/></li>                        
+                </ul>
+                
+            </ui:define>
+            <ui:define name="body">                       
+                
+                <h:form styleClass="jsfcrud_list_form">
+<!--                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>-->
+                    <h:outputText escape="false" value="#{bundle.Empty}" rendered="#{clientController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{clientController.items.rowCount > 0}">  
+                    <p:outputPanel style="font-size: small">
+                        <h:outputText value="#{clientController.pagination.pageFirstItem + 1}..#{clientController.pagination.pageLastItem + 1}/#{clientController.pagination.itemsCount}"/>&nbsp;
+                        <h:commandLink action="#{clientController.previous}" value="#{bundle.Previous}" 
+                                       rendered="#{clientController.pagination.hasPreviousPage}"/>&nbsp;
+                        <h:commandLink action="#{clientController.next}" value="#{bundle.Next}" rendered="#{clientController.pagination.hasNextPage}"/>&nbsp;
+                    </p:outputPanel>
+                    <h:dataTable value="#{clientController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ModifiedDate}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.modifiedDate}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ClientFirstName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.firstName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ClientLastName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.lastName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ClientUsername}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.username}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ClientPhone}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.phone}"/>                                                          
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ClientEmail}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.email}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ClientStreet}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.street}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ClientCity}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.city}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ClientState}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.state}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ClientType}"/>
+                            </f:facet>
+                            <h:dataTable value="#{item.groups}" var="group">
+                                <h:column><h:outputText value="#{clientController.getGroupType(group.groupId)}"/></h:column>                                
+                            </h:dataTable>
+                        </h:column>                            
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="&nbsp;"/>
+                            </f:facet>
+                            <h:commandLink action="#{clientController.prepareView}" value="#{bundle.View}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{clientController.prepareEdit}" value="#{bundle.Edit}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{clientController.destroy}" value="#{bundle.Remove}"/>
+                            <h:outputText value=" "/>
+                            <p:commandLink value="Orders" action="#{orderController.showOrderDialog}" 
+                                           style="font-size: small;font-family: 'RokkittRegular'">
+                                <f:setPropertyActionListener value="#{item}" target="#{orderController.currentClient}"/>
+                                <p:ajax event="dialogReturn" listener="#{orderController.dialogClosed}"/>
+                            </p:commandLink>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+                <br />
+                <p:outputPanel>
+                    <h:commandLink action="#{clientController.prepareCreate}" value="#{bundle.Create}"/>                
+                </p:outputPanel>
+            </h:form>
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
+
+

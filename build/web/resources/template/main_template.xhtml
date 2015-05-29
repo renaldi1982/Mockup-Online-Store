@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />    
+        <h:outputStylesheet name="./css/style.css"/>        
+        <title>Barnes and Toddler</title>
+    </h:head>
+
+    <h:body>
+        
+        <div class="page">
+            <div class="header">                
+                <h:link id="logo" outcome="/views/pages/index"/><h:graphicImage value="/resources/images/logo.gif" /> 
+                <f:event type="preRenderView" listener="#{clientController.eventClientController}"/>    
+                                
+                <h:form id="shoppingcart" 
+                        rendered="#{clientController.login and (not empty shoppingCartController.clientItemOrders)}">                                            
+                    <p:commandLink update=":shoppingcartform:shoppingcartdetails"                                                
+                                   oncomplete="PF('shoppingCartDialog').show()" 
+                                   title="Check Shopping Cart">
+                        <h:graphicImage value="/resources/images/shopping_cart.png">                                        
+                        </h:graphicImage>                        
+                    </p:commandLink>
+                </h:form>
+                                                                                                                
+                <ui:insert name="navigation">Navigation Bar</ui:insert>                
+            </div>
+            
+            <div class="body">                
+                
+                <ui:insert name="body">Body</ui:insert>
+                
+                <ul class="blog">
+                        <li>
+                            <div>                                                                            
+                                <h:link value="Bread" outcome="/views/pages/products">
+                                    <f:param name="category" value="Bread"/>
+                                </h:link>
+                                <h:graphicImage value="/resources/images/breadmain.jpg" /><br />                                                                             
+                                <h:link value="Shop for Milk" outcome="/views/pages/products">
+                                    <f:param name="category" value="Bread"/>
+                                </h:link>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <h:link value="Butter" outcome="/views/pages/products">
+                                    <f:param name="category" value="Butter"/>
+                                </h:link>
+                                <h:graphicImage value="/resources/images/buttermain.jpg" /><br />                                
+                                <h:link value="Shop for Butter" outcome="/views/pages/index">
+                                    <f:param name="category" value="Butter"/>
+                                </h:link>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <h:link value="Milk" outcome="/views/pages/products">
+                                    <f:param name="category" value="Milk"/>
+                                </h:link>
+                                <h:graphicImage value="/resources/images/milkmain.jpg" /><br />                                                                             
+                                <h:link value="Shop for Bread" outcome="/views/pages/index">
+                                    <f:param name="category" value="Milk"/>
+                                </h:link>
+                            </div>
+                        </li>
+                </ul>
+                
+            </div>
+                        
+            <div class="footer">
+                <h:form id="growlform">
+                    <p:growl id="growl" autoUpdate="true" life="3000"/>
+                </h:form>
+                <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="services.html">Services</a></li>
+                </ul>
+                <p>&#169; Copyright &#169; 2015. Ray Renaldi all rights reserved</p>
+                <div class="connect">
+                        <a href="http://facebook.com/" id="facebook">facebook</a>
+                        <a href="http://twitter.com/" id="twitter">twitter</a>
+                        <a href="http://www.vimeo.com/" id="vimeo">vimeo</a>
+                </div>
+            </div>
+            <ui:include rendered="#{clientController.login and(not empty shoppingCartController.clientItemOrders)}" src="/views/protected/shopping_cart.xhtml"></ui:include>            
+        </div>                             
+                
+    </h:body>
+
+</html>

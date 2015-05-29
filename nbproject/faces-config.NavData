@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="resources/template/main_template.xhtml" x="150" y="300" zoom="true"/>
+        <Node id="views/pages/index.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="views/error/404.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="views/error/403.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="views/authentication/login_error.xhtml" x="150" y="150" zoom="true"/>
+        <Node id="views/authentication/login.xhtml" x="400" y="450" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

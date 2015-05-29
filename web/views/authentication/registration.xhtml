@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:body>
+        
+        <ui:composition template="/resources/template/main_template.xhtml">                                                                     
+            <ui:define name="navigation">
+                <ul>                                                            
+                        <li><h:link value="Home" outcome="/views/pages/index"/></li>
+                        <li><h:link value="Products" outcome="/views/pages/products"/></li>                                                
+                        <li>
+                            <h:form>
+                                <h:commandLink value="#{(clientController.login) ? 'Logout' :'Login'}"
+                                               action ="#{clientController.doLogout(message)}"/>                            
+                            </h:form>
+                        </li>
+                        <li><h:link value="Contact Us" outcome="/views/pages/contact_us"/></li>                        
+                </ul>
+            </ui:define>
+            <ui:define name="body">                               
+                                        
+                    <h:form styleClass="jsfcrud_list_form" id="signupform">
+                        <p:outputPanel>
+                            <h3>Sign Up</h3>
+                        </p:outputPanel>
+                        
+                        <h:panelGrid columns="3" cellpadding="2" cellspacing="3">
+                            <h:outputLabel value="#{bundle.ClientUsername}" for="username" />
+                            <h:inputText id="username" value="#{clientController.clientBean.username}"
+                                         title="#{bundle.ClientUsername}" 
+                                         required="true" requiredMessage="#{bundle.ClientUsernameRequired}">
+                                <f:ajax listener="#{clientController.inputUsernameListener}" execute=":signupform:username"
+                                        render="username messageUsername" 
+                                        event="blur"/>
+                            </h:inputText>   
+                            <h:message id="messageUsername" for="username" errorStyle="color:red" infoStyle="color:green"/>
+                            <h:outputLabel value="#{bundle.ClientPassword}" for="password" />
+                            <h:inputSecret id="password" value="#{clientController.clientBean.password}" 
+                                           title="#{bundle.ClientPassword}" 
+                                           required="true" requiredMessage="#{bundle.ClientPasswordRequired}"/>
+                            <h:message for="password" errorStyle="color:red" infoStyle="color:green"/>
+                            <h:outputLabel value="#{bundle.ClientFirstName}" for="firstName" />
+                            <h:inputText id="firstName" value="#{clientController.clientBean.firstName}" 
+                                         title="#{bundle.ClientFirstName}"
+                                         required="true" requiredMessage="#{bundle.ClientFirstNameRequired}"/>                        
+                            <h:message for="firstName" errorStyle="color:red" infoStyle="color:green"/>
+                            <h:outputLabel value="#{bundle.ClientLastName}" for="lastName" />
+                            <h:inputText id="lastName" value="#{clientController.clientBean.lastName}" 
+                                         title="#{bundle.ClientLastName}"
+                                         required="true" requiredMessage="#{bundle.ClientLastNameRequired}"/>
+                            <h:message for="lastName" errorStyle="color:red" infoStyle="color:green"/>
+                            <h:outputLabel value="#{bundle.ClientPhone}" for="phone" />
+                            <h:inputText id="phone" value="#{clientController.clientBean.phone}" 
+                                         title="#{bundle.ClientPhone}" required="true" 
+                                         requiredMessage="#{bundle.ClientPhoneRequired}"/>
+                            <h:message for="phone" errorStyle="color:red" infoStyle="color:green"/>
+                            <h:outputLabel value="#{bundle.ClientEmail}" for="email" />
+                            <h:inputText id="email" value="#{clientController.clientBean.email}" 
+                                         title="#{bundle.ClientEmail}" required="true" 
+                                         requiredMessage="#{bundle.ClientEmailRequired}"/>
+                            <h:message for="email" errorStyle="color:red" infoStyle="color:green"/>
+                            <h:outputLabel value="#{bundle.ClientStreet}" for="street" />
+                            <h:inputText id="street" value="#{clientController.clientBean.street}" 
+                                         title="#{bundle.ClientStreet}" required="true" 
+                                         requiredMessage="#{bundle.ClientStreetRequired}"/>
+                            <h:message for="street" errorStyle="color:red" infoStyle="color:green"/>
+                            <h:outputLabel value="#{bundle.ClientCity}" for="city" />
+                            <h:inputText id="city" value="#{clientController.clientBean.city}" 
+                                         title="#{bundle.ClientCity}" required="true" 
+                                         requiredMessage="#{bundle.ClientCityRequired}"/>
+                            <h:message for="city" errorStyle="color:red" infoStyle="color:green"/>
+                            <h:outputLabel value="#{bundle.ClientState}" for="state" />
+                            <h:inputText id="state" value="#{clientController.clientBean.state}" 
+                                         title="#{bundle.ClientState}" required="true" 
+                                         requiredMessage="#{bundle.ClientStateRequired}"/>
+                            <h:message for="state" errorStyle="color:red" infoStyle="color:green"/>
+                            <h:outputLabel value=""/>
+                            <h:panelGroup style="display: block; alignment-adjust: central">                                
+                                <h:commandButton id="submitClient" value="Submit" 
+                                                 action="#{clientController.submitRegularClient}"/>                                
+                            </h:panelGroup>                                                       
+                        </h:panelGrid>
+                        <h:message for="submitClient" errorStyle="color:red" infoStyle="color:green"/>
+                    </h:form>                                                
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

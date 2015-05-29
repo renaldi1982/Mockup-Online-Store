@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:body>
+        
+        <ui:composition template="/resources/template/main_template.xhtml">                                                                     
+            <ui:define name="navigation">
+                <ul>                                                            
+                        <li class="selected"><h:link value="Home" outcome="/views/pages/index"/></li>
+                        <li><h:link value="Administrator Page" outcome="/views/protected/admin/admin" rendered="#{clientController.login and request.isUserInRole('admin')}"/></li>
+                        <li><h:link value="Customer Page" outcome="/views/protected/client/client" rendered="#{clientController.login and (not request.isUserInRole('admin'))}"/></li>
+                        <li><h:link value="Products" outcome="/views/pages/products"/></li>                                                
+                        <li>
+                            <h:form>
+                                <h:commandLink value="#{(clientController.login) ? 'Logout' :'Sign Up/Login'}"
+                                               action="#{clientController.doLogout('')}"/>                            
+                            </h:form>
+                        </li>
+                        <li><h:link value="Contact Us" outcome="/views/pages/contact_us"/></li>                        
+                </ul>
+            </ui:define>
+            <ui:define name="body">      
+                
+                <div id="featured">
+                        <h3>Welcome</h3>
+                        <p>I would like to give everyone that visit this website a humble and warm welcome.
+                        As you may or may not realize that this is probably the only website in the whole
+                        cyber world that sells only three products. That's right! three items only! so you 
+                        better move fast before these three items I have in the fridge gone.</p>
+                        <input type="button" value="Read more" onClick="parent.location='index.html'"/>
+                </div>
+                
+            </ui:define>           
+
+        </ui:composition>
+
+    </h:body>
+
+</html>
+

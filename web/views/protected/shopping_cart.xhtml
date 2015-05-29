@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:body>
+        <ui:composition>
+            <h:form id="shoppingcartform" styleClass="jsfcrud_list_form">
+                    <p:dialog header="Shopping Cart" 
+                              widgetVar="shoppingCartDialog" width="800px" height="400px"
+                              modal="true" showEffect="fade" hideEffect="fade" resizable="false" dynamic="true">
+                        <p:outputPanel id="shoppingcartdetails" 
+                                       style="font-size: small;margin-left: auto;margin-right: auto">
+                                                                              
+                                <h:outputText class="shoppingcartcustomer" value="Customer : "/>                                                        
+                                <h:outputText class="shoppingcartcustomer" value="#{clientController.activeClient.firstName.concat(',').concat(clientController.activeClient.lastName)}"/>
+                            
+                            <hr/>    
+
+                            <p:dataTable paginator="true" 
+                                         editable="true" editMode="cell" widgetVar="cellItems"
+                                         rowKey="#{cartitem.id}"
+                                         pageLinks="5"                                            
+                                         value="#{shoppingCartController.clientItemOrders}" 
+                                         var="cartitem">
+                                
+                                <p:ajax event="cellEdit" listener="#{shoppingCartController.updateQuantityShopCart}" 
+                                        update=":growlform:growl :shoppingcartform :showcaseproductform"/>                                
+                                <p:column headerText="Remove">
+                                    <p:selectBooleanCheckbox>
+                                        <f:ajax listener="#{shoppingCartController.prepareRemoveItemOrder(cartitem)}" 
+                                                render=":growlform:growl"/>
+                                    </p:selectBooleanCheckbox>
+                                </p:column>                        
+                                <p:column headerText="Item">                            
+                                    <h:outputText value="#{cartitem.item.name}"/>
+                                </p:column>
+                                <p:column headerText="Quantity">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText title="Click to change Quantity" 
+                                                          value="#{cartitem.orderQuantity}"/>
+                                        </f:facet>
+                                        <f:facet name="input">                                                                                            
+                                            <p:spinner title="Enter new Quantity"  
+                                                       min="1" 
+                                                       size="2" 
+                                                       value="#{cartitem.orderQuantity}"/>                                                                                                                                         
+                                        </f:facet>
+                                    </p:cellEditor>                                                        
+                                </p:column>
+                                <p:column headerText="Subtotal">                            
+                                    <h:outputText value="#{cartitem.orderSubTotal}">
+                                        <f:convertNumber currencyCode="USD" type="currency" maxFractionDigits="2" />
+                                    </h:outputText>
+                                </p:column>                        
+                            </p:dataTable>
+                            <p:outputPanel class="shoppingcartclass">                        
+                                <h:outputText value="Order Total"/><h:outputText value="&nbsp;&#58;&nbsp;&nbsp;"/>  
+                                <h:outputText id="shoppingcarttotal" value="#{shoppingCartController.total}">
+                                    <f:convertNumber currencyCode="USD" type="currency" maxFractionDigits="2"/>
+                                </h:outputText><br/><hr/>
+                                <p:commandButton value="Empty Cart" icon="ui-icon-trash">
+                                    <p:ajax update="@all" event="click" listener="#{shoppingCartController.emptyCart}"/>
+                                </p:commandButton>&nbsp;&nbsp;
+                                <p:commandButton value="Remove Selected" 
+                                                 icon="ui-icon-circle-close"
+                                                 action="#{shoppingCartController.removeItemOrder}"
+                                                 update=":growlform:growl :shoppingcartform"/>                                
+                                <p:commandButton action="#{shoppingCartController.checkout}" 
+                                                 value="Checkout" 
+                                                 icon="ui-icon-circle-check" 
+                                                 update="@all"/>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                    </p:dialog>                    
+            </h:form>
+        </ui:composition>
+    </h:body>            
+    
+</html>

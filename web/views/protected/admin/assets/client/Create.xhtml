@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:body>
+        <ui:composition template="/resources/template/main_template.xhtml">                                                                     
+            <ui:define name="navigation">
+                <ul>                                                            
+                    <li><h:link value="Home" outcome="/views/pages/index"/></li>
+                    <li><h:link value="Products" outcome="/views/pages/products"/></li>                                            
+                    <li class="selected">
+                        <h:form>
+                            <h:commandLink value="#{(clientController.login) ? 'Logout' :'Login'}"
+                                           action="#{clientController.doLogout('Logged Out Success! See you and come visit us again!')}"/>                            
+                        </h:form>
+                    </li>
+                    <li><h:link value="Contact Us" outcome="/views/snippets/image_management"/></li>                        
+                </ul>                
+            </ui:define>
+            
+            <ui:define name="body"> 
+                
+                <h:form id="signupform" class="jsfcrud_list_form">
+                    <h:panelGroup id="messagePanel" layout="block">
+                        <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                    </h:panelGroup>
+                    <h:panelGrid columns="3">                        
+                        <h:outputLabel value="#{bundle.ClientType}" for="selectonegroup" />
+                        <h:selectOneMenu id="selectonegroup" 
+                                         value="#{clientController.selectedGroup}">                    
+                            <f:selectItem itemLabel="-- Select Type --" itemValue="#{null}" />
+                            <f:selectItems var="type" 
+                                           id="selectclienttype" 
+                                           value="#{clientController.allGroups}"
+                                           itemLabel="#{type.groupType}">                          
+                            </f:selectItems>
+                            <f:ajax execute="this" event="change"/>
+                        </h:selectOneMenu>
+                        <h:message for="selectonegroup" id="messageClientType" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                        <h:outputLabel value="#{bundle.ModifiedDate}" for="modifieddate" />
+                        <h:inputText id="modifieddate" value="#{clientController.dateTime}"
+                                     title="#{bundle.ModifiedDate}" readonly="true">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:inputText>
+                        <h:message for="modifieddate" id="messageModifiedDate" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                        <h:outputLabel value="#{bundle.ClientUsername}" 
+                                       for="username" />
+                        <h:inputText id="username" value="#{clientController.selected.username}" 
+                                     title="#{bundle.ClientUsername}" required="true"
+                                     requiredMessage="#{bundle.ClientUsernameRequired}">
+                            <f:ajax event="blur" listener="#{clientController.inputUsernameListener}"
+                                    render="username messageUsername"/>
+                        </h:inputText>
+                        <h:message for="username" id="messageUsername" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                        <h:outputLabel value="#{bundle.ClientPassword}" for="password" />
+                        <h:inputSecret id="password" value="#{clientController.selected.password}" 
+                                     title="#{bundle.ClientPassword}" required="true"
+                                     requiredMessage="#{bundle.ClientPasswordRequired}"/>
+                        <h:message for="username" id="messagePassword" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                        <h:outputLabel value="#{bundle.ClientFirstName}" for="firstName" />
+                        <h:inputText id="firstName" value="#{clientController.selected.firstName}" 
+                                     title="#{bundle.ClientFirstName}" required="true" 
+                                     requiredMessage="#{bundle.ClientFirstNameRequired}"/>
+                        <h:message for="username" id="messageFirstName" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                        <h:outputLabel value="#{bundle.ClientLastName}" for="lastName" />
+                        <h:inputText id="lastName" value="#{clientController.selected.lastName}" 
+                                     title="#{bundle.ClientLastName}" required="true" 
+                                     requiredMessage="#{bundle.ClientLastNameRequired}"/>                            
+                        <h:message for="username" id="messageLastName" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                        <h:outputLabel value="#{bundle.ClientPhone}" for="phone" />
+                        <h:inputText id="phone" value="#{clientController.selected.phone}" 
+                                     title="#{bundle.ClientPhone}" required="true" 
+                                     requiredMessage="#{bundle.ClientPhoneRequired}"/>
+                        <h:message for="username" id="messagePhone" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                        <h:outputLabel value="#{bundle.ClientEmail}" for="email" />
+                        <h:inputText id="email" value="#{clientController.selected.email}" 
+                                     title="#{bundle.ClientEmail}" required="true" 
+                                     requiredMessage="#{bundle.ClientEmailRequired}"/>
+                        <h:message for="username" id="messageEmail" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                        <h:outputLabel value="#{bundle.ClientStreet}" for="street" />
+                        <h:inputText id="street" value="#{clientController.selected.street}" 
+                                     title="#{bundle.ClientStreet}" required="true" 
+                                     requiredMessage="#{bundle.ClientStreetRequired}"/>
+                        <h:message for="username" id="messageStreet" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                        <h:outputLabel value="#{bundle.ClientCity}" for="city" />
+                        <h:inputText id="city" value="#{clientController.selected.city}" 
+                                     title="#{bundle.ClientCity}" required="true" 
+                                     requiredMessage="#{bundle.ClientCityRequired}"/>
+                        <h:message for="username" id="messageCity" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                        <h:outputLabel value="#{bundle.ClientState}" for="state" />
+                        <h:inputText id="state" value="#{clientController.selected.state}" 
+                                     title="#{bundle.ClientState}" required="true" 
+                                     requiredMessage="#{bundle.ClientStateRequired}"/>                        
+                        <h:message for="username" id="messageState" errorStyle="color: red" 
+                                   infoStyle="color: green" />
+                    </h:panelGrid>
+                    <br />
+                    <h:commandLink action="#{clientController.create}" value="#{bundle.Save}"/>                                             
+                    <br />
+                    <br />
+                    <h:commandLink action="#{clientController.prepareList}" value="#{bundle.ListAll}" immediate="true"/>
+                    <br />
+                    <br />
+                    <h:link outcome="/views/pages/index" value="#{bundle.Index}"/>
+                </h:form>
+                
+            </ui:define>
+            
+        </ui:composition>
+    </h:body>
+</html>
+

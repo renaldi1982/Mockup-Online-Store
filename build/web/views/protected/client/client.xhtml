@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:body>
+        
+        <ui:composition template="/resources/template/main_template.xhtml">                                                                     
+            <ui:define name="navigation">
+                <ul>
+                    <li><h:link value="Home" outcome="/views/protected/client/client"/></li>
+                    <li><h:link value="Products" outcome="/views/pages/products"/></li>
+                    <li>
+                        
+                        <h:form>
+                            <p:commandLink value="Orders" action="#{orderController.showOrderDialog}">                                
+                            </p:commandLink>
+                        </h:form>
+                        
+                    </li>
+                    <li><h:link value="Update Profile" outcome="/views/protected/client/update_profile" rendered="#{clientController.login}"/></li>
+                    <li class="selected">
+                        <h:form>
+                            <h:commandLink value="#{(clientController.login) ? 'Logout' :'Login'}"
+                                           action="#{clientController.doLogout('')}"/>                            
+                        </h:form>
+                    </li>
+                </ul>
+            </ui:define>
+            <ui:define name="body">      
+                
+                <div id="featured">                                        
+                    <h3>Welcome, #{clientController.activeClient.firstName}</h3>
+                        <p>I would like to give everyone that visit this website a humble and warm welcome.
+                        As you may or may not realize that this is probably the only website in the whole
+                        cyber world that sells only three products. That's right! three items only! so you 
+                        better move fast before these three items I have in the fridge gone.</p>
+                </div>
+        
+                
+            </ui:define>
+            
+        </ui:composition>
+        
+    </h:body>
+</html>
+
